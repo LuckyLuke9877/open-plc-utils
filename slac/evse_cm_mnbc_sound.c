@@ -101,6 +101,11 @@ signed evse_cm_mnbc_sound (struct session * session, struct channel * channel, s
 		{
 			slac_debug (session, session->exit, __func__, "bad MTYPE");
 		}
+		// ll9877: add mmtype filter for vendor specific (VS) messages, otherwise "bad MMV" = 0x00
+		else if (LE16TOH (homeplug->homeplug.MMTYPE) >= VS_MMTYPE_MIN && LE16TOH (homeplug->homeplug.MMTYPE) <= VS_MMTYPE_MAX)
+		{
+			slac_debug (session, 0, __func__, "<-- vendor specific msg (0x%x)", LE16TOH (homeplug->homeplug.MMTYPE));
+		}
 		else if (homeplug->homeplug.MMV != HOMEPLUG_MMV)
 		{
 			slac_debug (session, session->exit, __func__, "bad MMV");
