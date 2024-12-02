@@ -104,8 +104,9 @@
 
 #define SLAC_LIMIT 40
 #define SLAC_PAUSE 20
-#define SLAC_SETTLETIME 10
-#define SLAC_CHARGETIME 2
+// ll9877 comment: for better response
+#define SLAC_SETTLETIME 5
+#define SLAC_CHARGETIME 5
 #define SLAC_FLAGS 0
 
 #define SLAC_SILENCE   (1 << 0)
