@@ -359,31 +359,8 @@ static void MatchedState (struct session * session, struct channel * channel, st
 
 #endif
 
-	slac_debug (session, 0, __func__, "Charging (%d) ...\n\n", session->counter++);
-	sleep (session->chargetime);
-	slac_debug (session, 0, __func__, "Disconnecting ...");
+	slac_debug (session, 0, __func__, "MatchedState, ready for communication\n");
 
-#if SLAC_AVLN_EVSE
-
-	slac_debug (session, 0, __func__, "waiting for evse to settle ...");
-	sleep (session->settletime);
-
-#endif
-
-#if SLAC_AVLN_PEV
-
-	memcpy (session->NMK, session->original_nmk, sizeof (session->NMK));
-	memcpy (session->NID, session->original_nid, sizeof (session->NID));
-	if (pev_cm_set_key (session, channel, message))
-	{
-		session->state = PEV_STATE_DISCONNECTED;
-		return;
-	}
-	sleep (session->settletime);
-
-#endif
-
-	session->state = state;
 	return;
 }
 
@@ -541,7 +518,7 @@ int main (int argc, char const * argv [])
 		if (session.state == PEV_STATE_MATCHED)
 		{
 			MatchedState (& session, & channel, & message);
-			continue;
+			break; // ll9877 comment: stop after matched
 		}
 		slac_debug (& session, 1, __func__, "Illegal state!");
 	}
